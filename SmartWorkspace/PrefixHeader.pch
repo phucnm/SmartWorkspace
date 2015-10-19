@@ -1,0 +1,69 @@
+//
+//  PrefixHeader.pch
+//  SmartWorkspace
+//
+//  Created by Phuc Nguyen on 10/14/15.
+//  Copyright © 2015 PHUCNGUYEN. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#endif /* PrefixHeader_pch */
+
+#ifdef __OBJC__
+
+#define IMAGES_PATH @"images"
+#define SOCKET_PORT 65432
+
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <GCDAsyncSocket.h>
+#import <CoreLocation/CoreLocation.h>
+#import <MapKit/MapKit.h>
+#import <IQKeyboardManager.h>
+#import <VENTouchLock.h>
+#import <FMDB.h>
+#import <DMPasscode.h>
+#import "SampleLockSplashViewController.h"
+#import "Utility.h"
+#import <ObjectiveFlickr.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <DropboxSDK/DropboxSDK.h>
+
+#import "ServiceModel.h"
+#import "WorkSpaceModel.h"
+#import "WorkSpaceManager.h"
+#import "ServiceManager.h"
+
+#import "ServiceConnectHelper.h"
+#import "ImageHelper.h"
+#import "DistanceHelper.h"
+#import "EncryptHelper.h"
+#import "BasicHelper.h"
+
+#import "WSAnnotation.h"
+#import "ARViewController.h"
+#import "WorkSpaceModel.h"
+#import "ARViewController.h"
+#import "ConnectViewController.h"
+
+#import "WorkSpaceTableViewCell.h"
+#import "MapsViewController.h"
+#import "WSCreateViewController.h"
+#import "UIScrollView+EmptyDataSet.h"
+#import "UIViewController+ENPopUp.h"
+#import "WSPopupViewController.h"
+#import <FlatUIKit.h>
+#import <INTULocationManager.h>
+#import <SVProgressHUD.h>
+#import <CNPGridMenu.h>
+#import <AFNetworking.h>
+#import <QRCodeReaderViewController.h>
+#import "AppDelegate.h"
+
+#endif

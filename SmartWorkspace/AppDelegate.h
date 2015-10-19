@@ -8,10 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, OFFlickrAPIRequestDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
-
+@property (strong, nonatomic) FMDatabase *db;
+@property (strong, nonatomic) NSString *simulateMode;
+@property (nonatomic, strong) OFFlickrAPIContext *flickrContext;
+@property (nonatomic, strong) NSString *flickrUserName;
+@property (nonatomic, strong) OFFlickrAPIRequest *flickrRequest;
+@property (nonatomic) BOOL _showingPasscode;
++(AppDelegate*) sharedDelegate;
+- (void)setAndStoreFlickrAuthToken:(NSString *)inAuthToken secret:(NSString *)inSecret;
+extern NSString *SRCallbackURLBaseString;
 @end
 

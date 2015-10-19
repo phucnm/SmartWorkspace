@@ -1,0 +1,76 @@
+PODS:
+  - AFNetworking (2.5.4):
+    - AFNetworking/NSURLConnection (= 2.5.4)
+    - AFNetworking/NSURLSession (= 2.5.4)
+    - AFNetworking/Reachability (= 2.5.4)
+    - AFNetworking/Security (= 2.5.4)
+    - AFNetworking/Serialization (= 2.5.4)
+    - AFNetworking/UIKit (= 2.5.4)
+  - AFNetworking/NSURLConnection (2.5.4):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/NSURLSession (2.5.4):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.5.4)
+  - AFNetworking/Security (2.5.4)
+  - AFNetworking/Serialization (2.5.4)
+  - AFNetworking/UIKit (2.5.4):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
+  - CNPGridMenu (0.2.1)
+  - CocoaAsyncSocket (7.4.2)
+  - DMPasscode (2.0.1)
+  - DZNEmptyDataSet (1.5.2)
+  - FlatUIKit (1.6.2)
+  - FMDB (2.5):
+    - FMDB/standard (= 2.5)
+  - FMDB/common (2.5)
+  - FMDB/standard (2.5):
+    - FMDB/common
+  - INTULocationManager (3.0.3)
+  - IQKeyboardManager (3.2.4)
+  - objectiveflickr (2.0.4)
+  - QRCodeReaderViewController (3.5.2)
+  - SSKeychain (1.2.3)
+  - SVProgressHUD (HEAD based on 1.1.3)
+  - SWTableViewCell (0.3.7)
+  - VENTouchLock (1.11.0):
+    - SSKeychain (~> 1.0)
+
+DEPENDENCIES:
+  - AFNetworking (~> 2.0)
+  - CNPGridMenu
+  - CocoaAsyncSocket
+  - DMPasscode
+  - DZNEmptyDataSet
+  - FlatUIKit
+  - FMDB
+  - INTULocationManager
+  - IQKeyboardManager
+  - objectiveflickr
+  - QRCodeReaderViewController (~> 3.5.2)
+  - SVProgressHUD (HEAD)
+  - SWTableViewCell (~> 0.3.7)
+  - VENTouchLock (~> 1.0)
+
+SPEC CHECKSUMS:
+  AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
+  CNPGridMenu: 37c8b18c1329499a744063b4aacf85c77b193cf6
+  CocoaAsyncSocket: f5783bdedd232d91b89769bc4b5a1580aed518ad
+  DMPasscode: 2c787063d41869bb3f78c88f38ea63739dc0a80e
+  DZNEmptyDataSet: 741da409081a4bf707c949c964623a6ad1799772
+  FlatUIKit: 1b41f0d4952ce8d970d8479ce79df54a960242c4
+  FMDB: 96e8f1bcc1329e269330f99770ad4285d9003e52
+  INTULocationManager: e79327803a163f5fec28eb042bb124ed0c6e4876
+  IQKeyboardManager: 555b1231fefafb21b19278d7cca72986a27b748b
+  objectiveflickr: aed169dae1eb5a5550ca78f7efd7ccde2e4c26e5
+  QRCodeReaderViewController: f20275985c41ae551099641493ab364691d9113e
+  SSKeychain: 3f42991739c6c60a9cf1bbd4dff6c0d3694bcf3d
+  SVProgressHUD: 748080e4f36e603f6c02aec292664239df5279c1
+  SWTableViewCell: 2a94aadc9d47b2b611fa064566bf57948b95b579
+  VENTouchLock: f3145d6fbff243d6692dfb1107b88db06dc216c9
+
+COCOAPODS: 0.39.0
