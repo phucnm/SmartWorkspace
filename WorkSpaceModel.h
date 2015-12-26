@@ -19,6 +19,7 @@
 @property (strong, nonatomic) NSString *ipaddr;
 @property (nonatomic) double lon;
 @property (nonatomic) double lat;
+@property (strong, nonatomic) NSString *computer_name;
 //@property (strong, nonatomic) NSString *address;
 -(instancetype) encrypt;
 -(instancetype) decrypt;

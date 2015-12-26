@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0202DDF01BCEADC700903425 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 0202DDEF1BCEADC700903425 /* Utility.m */; settings = {ASSET_TAGS = (); }; };
-		0202DDF21BCEB3AB00903425 /* Silver-Blur-Background-Wallpaper.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0202DDF11BCEB3AB00903425 /* Silver-Blur-Background-Wallpaper.jpg */; settings = {ASSET_TAGS = (); }; };
+		0202DDF01BCEADC700903425 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 0202DDEF1BCEADC700903425 /* Utility.m */; };
+		0202DDF21BCEB3AB00903425 /* Silver-Blur-Background-Wallpaper.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0202DDF11BCEB3AB00903425 /* Silver-Blur-Background-Wallpaper.jpg */; };
 		02073B191B3EFBFB00FF4A78 /* MarkerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02073B181B3EFBFB00FF4A78 /* MarkerView.xib */; };
-		020C17611BCEA6250022BD26 /* SampleLockSplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 020C175F1BCEA6240022BD26 /* SampleLockSplashViewController.m */; settings = {ASSET_TAGS = (); }; };
-		020C17621BCEA6250022BD26 /* SampleLockSplashViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 020C17601BCEA6250022BD26 /* SampleLockSplashViewController.xib */; settings = {ASSET_TAGS = (); }; };
+		020C17611BCEA6250022BD26 /* SampleLockSplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 020C175F1BCEA6240022BD26 /* SampleLockSplashViewController.m */; };
+		020C17621BCEA6250022BD26 /* SampleLockSplashViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 020C17601BCEA6250022BD26 /* SampleLockSplashViewController.xib */; };
 		020D60A81B4B706F000F8AB3 /* launch@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 020D60A71B4B706F000F8AB3 /* launch@2x.png */; };
 		020EEB0A1B3BAFA000A0C15A /* UIViewController+ENPopUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 020EEB091B3BAFA000A0C15A /* UIViewController+ENPopUp.m */; };
 		020EEB0E1B3BAFC300A0C15A /* JWBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 020EEB0D1B3BAFC300A0C15A /* JWBlurView.m */; };
@@ -63,6 +63,9 @@
 		0268E5881B3A682A00E36554 /* JPSThumnail.m in Sources */ = {isa = PBXBuildFile; fileRef = 0268E5851B3A682A00E36554 /* JPSThumnail.m */; };
 		026A66161B514F33009B1ADB /* news@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 026A66151B514F33009B1ADB /* news@2x.png */; };
 		0287145B1B39CD69003A7F63 /* DistanceHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0287145A1B39CD69003A7F63 /* DistanceHelper.m */; };
+		028B4AD61BEFA8B600551DB8 /* google@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 028B4AD51BEFA8B600551DB8 /* google@2x.png */; };
+		028B4AD91BEFAD5A00551DB8 /* dropbox2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 028B4AD71BEFAD5A00551DB8 /* dropbox2@2x.png */; };
+		028B4ADA1BEFAD5A00551DB8 /* google2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 028B4AD81BEFAD5A00551DB8 /* google2@2x.png */; };
 		029F7EF81B308FCD001BC172 /* WorkSpaceTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 029F7EF71B308FCD001BC172 /* WorkSpaceTableViewController.m */; };
 		029F7EFB1B309806001BC172 /* WorkSpaceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 029F7EFA1B309806001BC172 /* WorkSpaceModel.m */; };
 		029F7F021B309A76001BC172 /* WorkSpaceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 029F7F001B309A76001BC172 /* WorkSpaceTableViewCell.m */; };
@@ -74,7 +77,6 @@
 		02AEDD6F1B37F69700A35240 /* MarkerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AEDD6E1B37F69700A35240 /* MarkerView.m */; };
 		02B9EE551B4AE1CE002D6B38 /* UIImage+FixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B9EE541B4AE1CE002D6B38 /* UIImage+FixOrientation.m */; };
 		02B9EE581B4AF4D7002D6B38 /* EXPhotoViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B9EE571B4AF4D7002D6B38 /* EXPhotoViewer.m */; };
-		02BA03B31B49429300AB7BF2 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02BA03B21B49429300AB7BF2 /* CoreText.framework */; };
 		02BA03B51B49547800AB7BF2 /* Sad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02BA03B41B49547800AB7BF2 /* Sad@2x.png */; };
 		02BA03BB1B4957ED00AB7BF2 /* Services-100@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02BA03BA1B4957ED00AB7BF2 /* Services-100@2x.png */; };
 		02BA03BD1B49586000AB7BF2 /* Online-100@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02BA03BC1B49586000AB7BF2 /* Online-100@2x.png */; };
@@ -199,6 +201,9 @@
 		026A66151B514F33009B1ADB /* news@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "news@2x.png"; sourceTree = "<group>"; };
 		028714591B39CD69003A7F63 /* DistanceHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistanceHelper.h; sourceTree = "<group>"; };
 		0287145A1B39CD69003A7F63 /* DistanceHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistanceHelper.m; sourceTree = "<group>"; };
+		028B4AD51BEFA8B600551DB8 /* google@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "google@2x.png"; sourceTree = "<group>"; };
+		028B4AD71BEFAD5A00551DB8 /* dropbox2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropbox2@2x.png"; sourceTree = "<group>"; };
+		028B4AD81BEFAD5A00551DB8 /* google2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "google2@2x.png"; sourceTree = "<group>"; };
 		029F7EF61B308FCD001BC172 /* WorkSpaceTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WorkSpaceTableViewController.h; sourceTree = "<group>"; };
 		029F7EF71B308FCD001BC172 /* WorkSpaceTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WorkSpaceTableViewController.m; sourceTree = "<group>"; };
 		029F7EF91B309806001BC172 /* WorkSpaceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WorkSpaceModel.h; sourceTree = "<group>"; };
@@ -262,7 +267,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02BA03B31B49429300AB7BF2 /* CoreText.framework in Frameworks */,
 				026449D81B37CBEE006233C4 /* CoreLocation.framework in Frameworks */,
 				026449D31B37C27F006233C4 /* MapKit.framework in Frameworks */,
 				022ADF511B2FCCA000AF1C9E /* Security.framework in Frameworks */,
@@ -510,6 +514,9 @@
 		02CA8D5A1B32CBA3002A8227 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				028B4AD71BEFAD5A00551DB8 /* dropbox2@2x.png */,
+				028B4AD81BEFAD5A00551DB8 /* google2@2x.png */,
+				028B4AD51BEFA8B600551DB8 /* google@2x.png */,
 				0202DDF11BCEB3AB00903425 /* Silver-Blur-Background-Wallpaper.jpg */,
 				02147D871B4E1C3F0073B34F /* return@2x.png */,
 				020D60A71B4B706F000F8AB3 /* launch@2x.png */,
@@ -656,6 +663,7 @@
 			files = (
 				0202DDF21BCEB3AB00903425 /* Silver-Blur-Background-Wallpaper.jpg in Resources */,
 				02147D841B4E14610073B34F /* facebook2@2x.png in Resources */,
+				028B4AD91BEFAD5A00551DB8 /* dropbox2@2x.png in Resources */,
 				02E360B71B5353650097C73A /* db1.sqlite in Resources */,
 				020D60A81B4B706F000F8AB3 /* launch@2x.png in Resources */,
 				0230ADEA1B2F47E8006D3908 /* Main.storyboard in Resources */,
@@ -663,6 +671,7 @@
 				026A66161B514F33009B1ADB /* news@2x.png in Resources */,
 				020C17621BCEA6250022BD26 /* SampleLockSplashViewController.xib in Resources */,
 				02E360B81B5353650097C73A /* db2.sqlite in Resources */,
+				028B4AD61BEFA8B600551DB8 /* google@2x.png in Resources */,
 				02147D851B4E14610073B34F /* skype2@2x.png in Resources */,
 				02BA03BB1B4957ED00AB7BF2 /* Services-100@2x.png in Resources */,
 				0255C3BC1B394AD30098C4AC /* Pc On Desk-50.png in Resources */,
@@ -675,6 +684,7 @@
 				02147D881B4E1C3F0073B34F /* return@2x.png in Resources */,
 				0255C3C41B394E550098C4AC /* Dropbox-100@2x.png in Resources */,
 				02BA03B51B49547800AB7BF2 /* Sad@2x.png in Resources */,
+				028B4ADA1BEFAD5A00551DB8 /* google2@2x.png in Resources */,
 				02A6124A1B39B515005D5DE7 /* Satellite-100.png in Resources */,
 				0255C3C51B394E550098C4AC /* Facebook-100@2x.png in Resources */,
 				0230ADEF1B2F47E8006D3908 /* LaunchScreen.xib in Resources */,

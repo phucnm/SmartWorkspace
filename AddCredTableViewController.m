@@ -47,7 +47,7 @@
     [SVProgressHUD show];
     dispatch_queue_t myQueue = dispatch_queue_create("My Queue",NULL);
     dispatch_async(myQueue, ^{
-        [[ServiceManager sharedManager] updateOne:self.service];
+        [[ServiceManager sharedManager] updateOne:(ServiceModel*)self.service];
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
             [self.navigationController popViewControllerAnimated:YES];

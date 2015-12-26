@@ -34,6 +34,9 @@
 @property (nonatomic, strong) NSString *kioskIp;
 @property (nonatomic, strong) NSString *kioskPort;
 @property (nonatomic, strong) GCDAsyncSocket *asyncSocket;
+@property (nonatomic, strong) NSNumber *idNumber;
+@property (nonatomic) BOOL isSendDone;
+@property (strong, nonatomic) NSTimer *timer;
 @end
 
 @implementation ConnectViewController
@@ -69,7 +72,7 @@
 - (void) connectToKiosk:(NSString*) result {
     self.connectWs.ipaddr = result;
     NSString *host = [NSString stringWithFormat:@"http://%@:3000/kiosk/connect",result];
-    [self.manager GET:host parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.manager GET:host parameters:@{@"id":self.idNumber} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         self.isConnectedToKiosk = YES;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@", error.localizedDescription);
@@ -93,10 +96,10 @@
         }
     }
     
-    CNPGridMenuItem *news = [[CNPGridMenuItem alloc] init];
-    news.icon = [UIImage imageNamed:@"news"];
-    news.title = @"What's News";
-    [items addObject:news];
+//    CNPGridMenuItem *news = [[CNPGridMenuItem alloc] init];
+//    news.icon = [UIImage imageNamed:@"news"];
+//    news.title = @"What's News";
+//    [items addObject:news];
     
     CNPGridMenuItem *logout = [[CNPGridMenuItem alloc] init];
     logout.icon = [UIImage imageNamed:@"windows2"];
@@ -130,7 +133,7 @@
 -(void)gridMenu:(CNPGridMenu *)menu didTapOnItem:(CNPGridMenuItem *)item {
     if ([item.title isEqualToString:@"Logout"]) {
         NSString *host = [NSString stringWithFormat:@"http://%@%@",self.connectWs.ipaddr,@":3000/logout"];
-        [self.manager GET:host parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self.manager GET:host parameters:@{@"id":self.idNumber} success:^(AFHTTPRequestOperation *operation, id responseObject) {
             [self dismissGridMenuAnimated:YES completion:nil];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             [self showFUIAlertErrorWithMessage:[NSString stringWithFormat:@"%@", error.localizedDescription]];
@@ -148,10 +151,10 @@
         [self handleGridMenuItem:item];
     }
 }
-
+#pragma mark - handle actions
 -(void) handleDisconnectKiosk {
     NSString *host = [NSString stringWithFormat:@"http://%@:3000/kiosk/disconnect",self.connectWs.ipaddr];
-    [self.manager GET:host parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.manager GET:host parameters:@{@"id":self.idNumber} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         self.isConnectedToKiosk = NO;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@", error.localizedDescription);
@@ -159,25 +162,25 @@
 }
 
 -(void) handleWhatNews {
-    NSMutableDictionary *tokens = [NSMutableDictionary dictionary];
-    NSString *facebook_token = [[NSUserDefaults standardUserDefaults] objectForKey:@"Facebook_AccessToken"];
-    if (facebook_token)
-        [tokens setObject:facebook_token forKey:@"facebook_token"];
-    NSString *dropbox_token = [[NSUserDefaults standardUserDefaults] objectForKey:@"Dropbox_AccessToken"];
-    NSString *dropbox_token_secret = [[NSUserDefaults standardUserDefaults] objectForKey:@"Dropbox_AccessTokenSecret"];
-    if (dropbox_token && dropbox_token_secret) {
-        [tokens setObject:dropbox_token forKey:@"dropbox_token"];
-        [tokens setObject:dropbox_token_secret forKey:@"dropbox_token_secret"];
-    }
-    NSString *flickr_token = [[NSUserDefaults standardUserDefaults] objectForKey:@"Flickr_AccessToken"];
-    if (flickr_token)
-        [tokens setObject:flickr_token forKey:@"flickr_token"];
+//    NSMutableDictionary *tokens = [NSMutableDictionary dictionary];
+//    NSString *facebook_token = [[NSUserDefaults standardUserDefaults] objectForKey:@"Facebook_AccessToken"];
+//    if (facebook_token)
+//        [tokens setObject:facebook_token forKey:@"facebook_token"];
+//    NSString *dropbox_token = [[NSUserDefaults standardUserDefaults] objectForKey:@"Dropbox_AccessToken"];
+//    NSString *dropbox_token_secret = [[NSUserDefaults standardUserDefaults] objectForKey:@"Dropbox_AccessTokenSecret"];
+//    if (dropbox_token && dropbox_token_secret) {
+//        [tokens setObject:dropbox_token forKey:@"dropbox_token"];
+//        [tokens setObject:dropbox_token_secret forKey:@"dropbox_token_secret"];
+//    }
+//    NSString *flickr_token = [[NSUserDefaults standardUserDefaults] objectForKey:@"Flickr_AccessToken"];
+//    if (flickr_token)
+//        [tokens setObject:flickr_token forKey:@"flickr_token"];
     
     //NSLog(@"%@", tokens);
     
     NSString *host = [NSString stringWithFormat:@"http://%@%@",self.connectWs.ipaddr,@":3000/news/login"];
 
-    [self.manager POST:host parameters:tokens success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.manager POST:host parameters:@{@"id":self.idNumber} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"%@", responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [self showFUIAlertErrorWithMessage:error.localizedDescription];
@@ -189,7 +192,7 @@
     
     if (item.isTapped) { //is logged in
         NSString *host = [NSString stringWithFormat:@"http://%@%@",self.connectWs.ipaddr,@":3000/yahoo/logout"];
-        [self.manager GET:host parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self.manager GET:host parameters:@{@"id":self.idNumber} success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"%@", responseObject);
             item.isTapped = !item.isTapped;
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -198,7 +201,7 @@
 
     } else {
         NSString *host = [NSString stringWithFormat:@"http://%@%@",self.connectWs.ipaddr,@":3000/yahoo/login"];
-        NSDictionary *params = [NSDictionary dictionaryWithObjects:@[service.username, service.password] forKeys:@[@"username", @"password"]];
+        NSDictionary *params = [NSDictionary dictionaryWithObjects:@[service.username, service.password, self.idNumber] forKeys:@[@"username", @"password", @"id"]];
         [self.manager POST:host parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"%@", responseObject);
             item.isTapped = !item.isTapped;
@@ -212,7 +215,7 @@
     
     if (item.isTapped) { //is logged in
         NSString *host = [NSString stringWithFormat:@"http://%@%@",self.connectWs.ipaddr,@":3000/skype/logout"];
-        [self.manager GET:host parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self.manager GET:host parameters:@{@"id":self.idNumber} success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"%@", responseObject);
             item.isTapped = !item.isTapped;
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -221,7 +224,7 @@
         
     } else {
         NSString *host = [NSString stringWithFormat:@"http://%@%@",self.connectWs.ipaddr,@":3000/skype/login"];
-        NSDictionary *params = [NSDictionary dictionaryWithObjects:@[service.username, service.password] forKeys:@[@"username", @"password"]];
+        NSDictionary *params = [NSDictionary dictionaryWithObjects:@[service.username, service.password, self.idNumber] forKeys:@[@"username", @"password", @"id"]];
         [self.manager POST:host parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"%@", responseObject);
             item.isTapped = !item.isTapped;
@@ -231,10 +234,33 @@
     }
 
 }
+-(void) handleDropbox:(CNPGridMenuItem*)item {
+    ServiceModel *service = item.tag;
+    NSString *host = [NSString stringWithFormat:@"http://%@%@",self.connectWs.ipaddr,@":3000/dropbox"];
+    NSDictionary *params = [NSDictionary dictionaryWithObjects:@[service.username, service.password, self.idNumber] forKeys:@[@"username", @"password", @"id"]];
+    [self.manager POST:host parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"%@", responseObject);
+        item.isTapped = !item.isTapped;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self showFUIAlertErrorWithMessage:error.localizedDescription];
+    }];
+}
+-(void) handleGmail:(CNPGridMenuItem*)item {
+    ServiceModel *service = item.tag;
+    NSString *host = [NSString stringWithFormat:@"http://%@%@",self.connectWs.ipaddr,@":3000/gmail"];
+    NSDictionary *params = [NSDictionary dictionaryWithObjects:@[service.username, service.password, self.idNumber] forKeys:@[@"username", @"password", @"id"]];
+    [self.manager POST:host parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"%@", responseObject);
+        item.isTapped = !item.isTapped;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self showFUIAlertErrorWithMessage:error.localizedDescription];
+    }];
+}
+
 -(void) handleFacebook:(CNPGridMenuItem*)item {
     ServiceModel *service = item.tag;
     NSString *host = [NSString stringWithFormat:@"http://%@%@",self.connectWs.ipaddr,@":3000/fb"];
-    NSDictionary *params = [NSDictionary dictionaryWithObjects:@[service.username, service.password] forKeys:@[@"username", @"password"]];
+    NSDictionary *params = [NSDictionary dictionaryWithObjects:@[service.username, service.password, self.idNumber] forKeys:@[@"username", @"password", @"id"]];
     [self.manager POST:host parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"%@", responseObject);
         item.isTapped = !item.isTapped;
@@ -259,18 +285,30 @@
             [self handleFacebook:item];
         }
             break;
+        case DROPBOX_WEB: {
+            [self handleDropbox:item];
+        }
+            break;
+        case GMAIL_WEB: {
+            [self handleGmail:item];
+        }
+            break;
         default:
             break;
     }
 }
 
 #pragma Start connecting
+//Connect to workspace butotn
 - (IBAction)startClicked:(id)sender {
     [SVProgressHUD showWithStatus:@"Connecting"];
+    //Time out 3.0 sec
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:3.0f target:self selector:@selector(timedOut) userInfo:nil repeats:NO];
     dispatch_queue_t myQueue = dispatch_queue_create("My Queue",NULL);
     dispatch_async(myQueue, ^{
         [self initNetworkCommunication];
         [self sendCredentials];
+        self.isSendDone = YES;
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
             [self.actionButton setEnabled:YES];
@@ -279,15 +317,16 @@
 }
 
 
-#pragma Search for Workspaces
+#pragma mark - Search for Workspaces
 
 - (IBAction)searchClicked:(id)sender {
 //    self.clManager.delegate = self;
 //    [self.clManager startUpdatingLocation];
     [self.startButton setEnabled:NO];
+    [self.clManager startUpdatingLocation];
     //[self.actionButton setEnabled:NO];
-    [self startINTULocation];
-    [SVProgressHUD showWithStatus:@"Searching for workspaces"];
+//    [self startINTULocation];
+//    [SVProgressHUD showWithStatus:@"Searching for workspaces"];
 }
 
 - (void) startINTULocation {
@@ -328,6 +367,7 @@
                     PickWSTableViewController *pickViewCtrl = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"PickWS"];
                     pickViewCtrl.workspaces = self.connectableWs;
                     pickViewCtrl.delegate = self;
+//                    [self.navigationController pushViewController:pickViewCtrl animated:YES];
                     [self presentViewController:pickViewCtrl animated:YES completion:nil];
                 }
             }
@@ -401,57 +441,57 @@
     [alertView show];
 }
 
--(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    CLLocation *location = [locations lastObject];
-    if ([location horizontalAccuracy] > 75) {
-        return;
-    }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [SVProgressHUD dismiss];
-    });
-    
-    self.connectableWs = [NSMutableArray array];
-    int radiusAround = 100;
-    for (int i = 0; i < [self.workspaces count]; i++) {
-        WorkSpaceModel *tmpWs = [self.workspaces objectAtIndex:i];
-        CLLocation *tmpLocation = [[CLLocation alloc] initWithLatitude:tmpWs.lat longitude:tmpWs.lon];
-        double dst = [location distanceFromLocation:tmpLocation];
-        if (dst <= radiusAround) {
-            [self.connectableWs addObject:tmpWs];
-
-        }
-    }
-    [self.clManager stopUpdatingLocation];
-    self.clManager.delegate = nil;
-    if ([self.connectableWs count] == 0) {
-        //[SVProgressHUD showErrorWithStatus:@"No workspaces are near here"];
-        FUIAlertView *alertView                     = [[FUIAlertView alloc] initWithTitle:@"Sorry"
-                                                              message:@"No workspaces are near here"
-                                                             delegate:nil cancelButtonTitle:@"I know"
-                                                    otherButtonTitles:nil];
-        alertView.titleLabel.textColor              = [UIColor cloudsColor];
-        alertView.titleLabel.font                   = [UIFont boldFlatFontOfSize:16];
-        alertView.messageLabel.textColor            = [UIColor cloudsColor];
-        alertView.messageLabel.font                 = [UIFont flatFontOfSize:14];
-        alertView.backgroundOverlay.backgroundColor = [[UIColor cloudsColor] colorWithAlphaComponent:0.8];
-        alertView.alertContainer.backgroundColor    = [UIColor midnightBlueColor];
-        alertView.defaultButtonColor                = [UIColor cloudsColor];
-        alertView.defaultButtonShadowColor          = [UIColor asbestosColor];
-        alertView.defaultButtonFont                 = [UIFont boldFlatFontOfSize:16];
-        alertView.defaultButtonTitleColor           = [UIColor asbestosColor];
-        [alertView show];
-    } else if ([self.connectableWs count] == 1) {
-        //[self.connectButton setEnabled:YES];
-        //[self.connectButton sendActionsForControlEvents:UIControlEventTouchUpInside];
-        self.connectWs = [self.connectableWs firstObject];
-        [self chosenAWS];
-    } else {
-        PickWSTableViewController *pickViewCtrl = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"PickWS"];
-        pickViewCtrl.workspaces = self.connectableWs;
-        pickViewCtrl.delegate = self;
-        [self presentViewController:pickViewCtrl animated:YES completion:nil];
-    }
-}
+//-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+//    CLLocation *location = [locations lastObject];
+//    if ([location horizontalAccuracy] > 75) {
+//        return;
+//    }
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [SVProgressHUD dismiss];
+//    });
+//    
+//    self.connectableWs = [NSMutableArray array];
+//    int radiusAround = 100;
+//    for (int i = 0; i < [self.workspaces count]; i++) {
+//        WorkSpaceModel *tmpWs = [self.workspaces objectAtIndex:i];
+//        CLLocation *tmpLocation = [[CLLocation alloc] initWithLatitude:tmpWs.lat longitude:tmpWs.lon];
+//        double dst = [location distanceFromLocation:tmpLocation];
+//        if (dst <= radiusAround) {
+//            [self.connectableWs addObject:tmpWs];
+//
+//        }
+//    }
+//    [self.clManager stopUpdatingLocation];
+//    self.clManager.delegate = nil;
+//    if ([self.connectableWs count] == 0) {
+//        //[SVProgressHUD showErrorWithStatus:@"No workspaces are near here"];
+//        FUIAlertView *alertView                     = [[FUIAlertView alloc] initWithTitle:@"Sorry"
+//                                                              message:@"No workspaces are near here"
+//                                                             delegate:nil cancelButtonTitle:@"I know"
+//                                                    otherButtonTitles:nil];
+//        alertView.titleLabel.textColor              = [UIColor cloudsColor];
+//        alertView.titleLabel.font                   = [UIFont boldFlatFontOfSize:16];
+//        alertView.messageLabel.textColor            = [UIColor cloudsColor];
+//        alertView.messageLabel.font                 = [UIFont flatFontOfSize:14];
+//        alertView.backgroundOverlay.backgroundColor = [[UIColor cloudsColor] colorWithAlphaComponent:0.8];
+//        alertView.alertContainer.backgroundColor    = [UIColor midnightBlueColor];
+//        alertView.defaultButtonColor                = [UIColor cloudsColor];
+//        alertView.defaultButtonShadowColor          = [UIColor asbestosColor];
+//        alertView.defaultButtonFont                 = [UIFont boldFlatFontOfSize:16];
+//        alertView.defaultButtonTitleColor           = [UIColor asbestosColor];
+//        [alertView show];
+//    } else if ([self.connectableWs count] == 1) {
+//        //[self.connectButton setEnabled:YES];
+//        //[self.connectButton sendActionsForControlEvents:UIControlEventTouchUpInside];
+//        self.connectWs = [self.connectableWs firstObject];
+//        [self chosenAWS];
+//    } else {
+//        PickWSTableViewController *pickViewCtrl = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"PickWS"];
+//        pickViewCtrl.workspaces = self.connectableWs;
+//        pickViewCtrl.delegate = self;
+//        [self presentViewController:pickViewCtrl animated:YES completion:nil];
+//    }
+//}
 
 -(void) chosenAWS {
     self.wsName.text = self.connectWs.name;
@@ -474,10 +514,45 @@
     [self chosenAWS];
 }
 
+#pragma mark - Socket - Login Windows
+- (void) initNetworkCommunication {
+    //[self.indicator startAnimating];
+    //NSString *host = self.connectWs.ipaddr;
+    NSString *host = self.connectWs.ipaddr;
+    //PORT
+    int port = 65432;
+    //    int port       = [self.portTF.text intValue];
+    
+    CFReadStreamRef readStream;
+    CFWriteStreamRef writeStream;
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)CFBridgingRetain(host), port, &readStream, &writeStream);
+    //NSLog(@"init socket");
+    //[self.status.text stringByAppendingFormat:@"Init socket"];
+    self.inputStream  = CFBridgingRelease((readStream));
+    self.outputStream = CFBridgingRelease((writeStream));
+    [self.inputStream setDelegate:self];
+    [self.outputStream setDelegate:self];
+    [self.inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [self.outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [self.inputStream open];
+    [self.outputStream open];
+    
+    //[self.status.text stringByAppendingFormat:@"\nConnected to host %@:%d", host, port];
+}
+
+- (void) timedOut {
+    if (!self.isSendDone) {
+        [SVProgressHUD dismiss];
+        [self.actionButton setEnabled:YES];
+        [self showFUIAlertErrorWithMessage:@"There was an internet problem. Try again"];
+    }
+    [self.timer invalidate];
+    self.timer = nil;
+}
+
 - (IBAction)connectClicked:(id)sender {
     [SVProgressHUD showWithStatus:@"Connecting"];
-    
-    
+    [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(timedOut) userInfo:nil repeats:NO];
     dispatch_queue_t myQueue = dispatch_queue_create("My Queue",NULL);
     dispatch_async(myQueue, ^{
         [self initNetworkCommunication];
@@ -490,10 +565,16 @@
 }
 
 -(void) sendCredentials {
+    //to test encrypt function only
     NSString *res = [[BasicHelper sharedHelper] encryptCPP:@"phuc"];
     NSLog(@"%@", res);
     NSString *rev = [[BasicHelper sharedHelper] encryptCPP:res];
     NSLog(@"%@", rev);
+    
+    //what is id mobile ?
+    //circumstance: a mobile device has to demo that server only accept socket login from
+    //which id is registered before
+    //(id.txt in C:/SmartSystem/)
     NSString *idMobile = [AppDelegate sharedDelegate].simulateMode;
     [self sendMessage:idMobile];
     [self receiveMessage];
@@ -501,7 +582,7 @@
     [self receiveMessage];
     [self sendMessage:self.connectWs.password];
     [self receiveMessage];
-    [self sendMessage:@"PN9999"];
+    [self sendMessage:self.connectWs.computer_name];
 }
 - (IBAction)sendHeader:(id)sender {
     NSLog(@"sending header");
@@ -583,54 +664,39 @@
     NSLog(@"SOCKET - Did read data %@ with tag %ld", strData, tag);
 }
 
-- (void) initNetworkCommunication {
-    //[self.indicator startAnimating];
-    //NSString *host = self.connectWs.ipaddr;
-    NSString *host = self.connectWs.ipaddr;
-    int port = 65432;
-//    int port       = [self.portTF.text intValue];
-    
-    CFReadStreamRef readStream;
-    CFWriteStreamRef writeStream;
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)CFBridgingRetain(host), port, &readStream, &writeStream);
-    //NSLog(@"init socket");
-    //[self.status.text stringByAppendingFormat:@"Init socket"];
-    self.inputStream  = CFBridgingRelease((readStream));
-    self.outputStream = CFBridgingRelease((writeStream));
-    [self.inputStream setDelegate:self];
-    [self.outputStream setDelegate:self];
-    [self.inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [self.outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [self.inputStream open];
-    [self.outputStream open];
-
-    //[self.status.text stringByAppendingFormat:@"\nConnected to host %@:%d", host, port];
-}
-
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.workspaces = [[WorkSpaceManager sharedManager] selectAll];
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [self.timer invalidate];
+    self.timer = nil;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-//    [self.connectButton setEnabled:NO];
-//    [self.sendHeaderButton setEnabled:NO];
+    
+    //hard code
+    //send id in every request to recognize what is the coming device
+    //situation: when server first received a request from a device (with id)
+    //after that, server does not respond to other device (based on current device id)
+    //until the device is disconnected from server
+    //TODO: refactor this
+    self.idNumber = @1;
+    
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
+    
+    //Location manager
     self.manager = [AFHTTPRequestOperationManager manager];
     self.manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     self.clManager = [[CLLocationManager alloc] init];
-    [self.clManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
+    [self.clManager setDesiredAccuracy:kCLLocationAccuracyBest];
     [self.clManager setDelegate:self];
-    //[self.clManager startUpdatingLocation];
-//    [[self.connectButton layer] setBorderWidth:1.0f];
-//    [[self.connectButton layer] setBorderColor:[UIColor blueColor].CGColor];
-//    [[self.connectButton layer] setCornerRadius:10.0f];
-//    [[self.sendHeaderButton layer] setBorderWidth:1.0f];
-//    [[self.sendHeaderButton layer] setBorderColor:[UIColor blueColor].CGColor];
-//    [[self.sendHeaderButton layer] setCornerRadius:10.0f];
     
+    //setup UI
     self.startButton.buttonColor  = [UIColor turquoiseColor];
     self.startButton.shadowColor  = [UIColor greenSeaColor];
     self.startButton.shadowHeight = 3.0f;
@@ -663,17 +729,18 @@
     [self.actionButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
     [self.actionButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
     
-    //[self.clManager startUpdatingLocation];
+    
+    //Search and auto choose a workspace after did load VC
     [self.startButton setEnabled:NO];
     //[self.actionButton setEnabled:NO];
     if (!self.isFromMapOrAR) {
-        [self startINTULocation];
-        [SVProgressHUD showWithStatus:@"Searching for workspaces"];
+        //[self startINTULocation];
+        [self.clManager startUpdatingLocation];
+//        [SVProgressHUD showWithStatus:@"Searching for workspaces"];
     } else {
         [self chosenAWS];
     }
 }
-    
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -689,6 +756,48 @@
     // Pass the selected object to the new view controller.
     ActionViewController *action = [segue destinationViewController];
     action.ipaddr = self.connectWs.ipaddr;
+}
+
+#pragma mark - location
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    CLLocation *currentLocation = [locations lastObject];
+    [self.clManager stopUpdatingLocation];
+    self.connectableWs = [NSMutableArray array];
+    int radiusAround = 100;
+    for (int i = 0; i < [self.workspaces count]; i++) {
+        WorkSpaceModel *tmpWs = [self.workspaces objectAtIndex:i];
+        CLLocation *tmpLocation = [[CLLocation alloc] initWithLatitude:tmpWs.lat longitude:tmpWs.lon];
+        double dst = [currentLocation distanceFromLocation:tmpLocation];
+        if (dst <= radiusAround) {
+            [self.connectableWs addObject:tmpWs];
+        }
+    }
+    if ([self.connectableWs count] == 0) {
+        FUIAlertView *alertView                     = [[FUIAlertView alloc] initWithTitle:@"Sorry"
+                                                                                  message:@"No workspaces are near here"
+                                                                                 delegate:nil cancelButtonTitle:@"I know"
+                                                                        otherButtonTitles:nil];
+        alertView.titleLabel.textColor              = [UIColor cloudsColor];
+        alertView.titleLabel.font                   = [UIFont boldFlatFontOfSize:16];
+        alertView.messageLabel.textColor            = [UIColor cloudsColor];
+        alertView.messageLabel.font                 = [UIFont flatFontOfSize:14];
+        alertView.backgroundOverlay.backgroundColor = [[UIColor cloudsColor] colorWithAlphaComponent:0.8];
+        alertView.alertContainer.backgroundColor    = [UIColor midnightBlueColor];
+        alertView.defaultButtonColor                = [UIColor cloudsColor];
+        alertView.defaultButtonShadowColor          = [UIColor asbestosColor];
+        alertView.defaultButtonFont                 = [UIFont boldFlatFontOfSize:16];
+        alertView.defaultButtonTitleColor           = [UIColor asbestosColor];
+        [alertView show];
+    } else if ([self.connectableWs count] == 1) {
+        self.connectWs = [self.connectableWs firstObject];
+        [self chosenAWS];
+    } else {
+        PickWSTableViewController *pickViewCtrl = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"PickWS"];
+        pickViewCtrl.workspaces = self.connectableWs;
+        pickViewCtrl.delegate = self;
+        //                    [self.navigationController pushViewController:pickViewCtrl animated:YES];
+        [self presentViewController:pickViewCtrl animated:YES completion:nil];
+    }
 }
 
 

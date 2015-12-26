@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'C1A9213221E6020B63426FAA'
+               BlueprintIdentifier = 'F5E7B704AB76191ABB719B78'
                BlueprintName = 'CNPGridMenu'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libCNPGridMenu.a'>

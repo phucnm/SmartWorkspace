@@ -15,7 +15,8 @@ typedef NS_ENUM(NSInteger, SERVICE_TYPE) {
     FACEBOOK_WEB   = 3,
     GMAIL_WEB      = 4,
     YAHOO_WIN      = 5,
-    SKYPE_WIN      = 6
+    SKYPE_WIN      = 6,
+    DROPBOX_WEB    = 7
 };
 
 @interface ServiceModel : NSObject

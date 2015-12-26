@@ -49,11 +49,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>IQKeyboardManager.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>Pods-SmartWorkspace.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -97,21 +92,6 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>1A011A5AABCA21DB3E0465920928BE60</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>1BB42943CCC9B536915D25BF791560AE</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>1EBDEF94FE7CFAFA60F00DC60AB83BB1</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>2517626E27D348944A3552F279EEB74A</key>
 		<dict>
 			<key>primary</key>
@@ -122,12 +102,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>3761D486490AA2BD075551C84F2E75C5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>452C573AF416562339893754F651D8E3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>55DBDD8B7D446F1D618F303A9FB53209</key>
+		<key>54ED8A24E72A139DA2B58DA81B61AB14</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -137,7 +122,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>7C8E737F3B0A8A9E6285804AD4422033</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>7E541DB54EDDCF73D6CC979B37313340</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>82F65C1501CD5290D7C912E179550B60</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -147,22 +142,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BF39E4F20B7D217CF8648A761CB50B4E</key>
+		<key>BB7DB7813625DD33F6B8AC54EA754381</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C529EADF5BB1CC55401068E246962D73</key>
+		<key>CC594D4838FAA0274863857C570E056A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>D072D7D8D2ACB4F987970415F0E4B161</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>E13F5BDC1FC6580EB9B1C2936DE5FEF9</key>
 		<dict>
 			<key>primary</key>
 			<true/>

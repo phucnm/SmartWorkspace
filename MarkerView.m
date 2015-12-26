@@ -72,7 +72,7 @@ const float kHeight = 60.0f;
         [title sizeToFit];
         
         //4
-        _lblDistance = [[UILabel alloc] initWithFrame:CGRectMake(80, 40.0f, 50.0f, 40.0f)];
+        _lblDistance = [[UILabel alloc] initWithFrame:CGRectMake(80, 40.0f, 100.0f, 40.0f)];
         //[_lblDistance setBackgroundColor:[UIColor colorWithWhite:0.3f alpha:0.2f]];
         [_lblDistance setTextColor:[UIColor whiteColor]];
         [_lblDistance setTextAlignment:NSTextAlignmentCenter];

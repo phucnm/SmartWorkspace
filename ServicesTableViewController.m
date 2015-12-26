@@ -17,7 +17,7 @@
 #import "ServiceManager.h"
 #import <SVProgressHUD.h>
 
-@interface ServicesTableViewController () <FBSDKLoginButtonDelegate, OFFlickrAPIRequestDelegate, SWTableViewCellDelegate, FUIAlertViewDelegate>
+@interface ServicesTableViewController () <FBSDKLoginButtonDelegate, OFFlickrAPIRequestDelegate, SWTableViewCellDelegate, FUIAlertViewDelegate, UITextFieldDelegate>
 
 @property (strong, nonatomic) NSMutableArray *arrServices;
 @property (nonatomic) FBSDKLoginButton *loginButton;
@@ -86,6 +86,16 @@
             model.icon_path = @"facebook";
         }
             break;
+        case 4: {
+            model.type = GMAIL_WEB;
+            model.icon_path = @"google";
+        }
+            break;
+        case 5: {
+            model.type = DROPBOX_WEB;
+            model.icon_path = @"dropbox";
+        }
+            break;
         default:
             return;
     }
@@ -107,7 +117,7 @@
 
 #pragma mark - Add button
 - (IBAction)addButtonClicked:(id)sender {
-    FUIAlertView *alertView = [[FUIAlertView alloc] initWithTitle:@"Create new identity" message:@"Enter name" delegate:nil cancelButtonTitle:@"Dismiss" otherButtonTitles:@"Yahoo! Messenger", @"Skype", @"Facebook web", nil];
+    FUIAlertView *alertView = [[FUIAlertView alloc] initWithTitle:@"Create new identity" message:@"Enter name" delegate:nil cancelButtonTitle:@"Dismiss" otherButtonTitles:@"Yahoo! Messenger", @"Skype", @"Facebook web", @"Gmail web", @"Dropbox web", nil];
     alertView.alertViewStyle = FUIAlertViewStylePlainTextInput;
     [@[[alertView textFieldAtIndex:0], [alertView textFieldAtIndex:1]] enumerateObjectsUsingBlock:^(FUITextField *textField, NSUInteger idx, BOOL *stop) {
         [textField setTextFieldColor:[UIColor cloudsColor]];
@@ -117,7 +127,7 @@
         [textField setTextColor:[UIColor midnightBlueColor]];
     }];
     [[alertView textFieldAtIndex:0] setPlaceholder:@"Name"];
-    
+    [alertView textFieldAtIndex:0].delegate = self;
     alertView.delegate = self;
     alertView.titleLabel.textColor = [UIColor cloudsColor];
     alertView.titleLabel.font = [UIFont boldFlatFontOfSize:16];
@@ -279,7 +289,9 @@
             break;
         case YAHOO_WIN:
         case SKYPE_WIN:
-        case FACEBOOK_WEB: {
+        case FACEBOOK_WEB:
+        case DROPBOX_WEB:
+        case GMAIL_WEB: {
             [cell.connectedGreen setHidden:YES];
             [cell.connectButton setHidden:YES];
             [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
@@ -309,7 +321,9 @@
         }
         case YAHOO_WIN:
         case SKYPE_WIN:
-        case FACEBOOK_WEB: {
+        case FACEBOOK_WEB:
+        case DROPBOX_WEB:
+        case GMAIL_WEB: {
             //name = @"FB_WEB";
             ServiceModel *service = [self.arrServices objectAtIndex:indexPath.section];
             addCred.service = service;
@@ -421,6 +435,10 @@ NSString *kUploadImageStep        = @"kUploadImageStep";
 
 -(void) dropboxDidLogin:(NSNotification*) ns {
     [self.tableView reloadData];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    return YES;
 }
 
 @end

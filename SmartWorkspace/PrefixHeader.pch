@@ -24,7 +24,8 @@
 #import <GCDAsyncSocket.h>
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
-#import <IQKeyboardManager.h>
+#import <FlatUIKit.h>
+//#import <IQKeyboardManager.h>
 #import <VENTouchLock.h>
 #import <FMDB.h>
 #import <DMPasscode.h>
@@ -58,7 +59,7 @@
 #import "UIScrollView+EmptyDataSet.h"
 #import "UIViewController+ENPopUp.h"
 #import "WSPopupViewController.h"
-#import <FlatUIKit.h>
+
 #import <INTULocationManager.h>
 #import <SVProgressHUD.h>
 #import <CNPGridMenu.h>

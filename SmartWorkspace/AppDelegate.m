@@ -89,8 +89,8 @@ NSString *kCheckTokenStep = @"kCheckTokenStep";
 //    NSString *simulatePath = [[NSBundle mainBundle] pathForResource:@"db1" ofType:@"sqlite"];
 //    NSLog(@"%@", simulatePath);
     
-    [[IQKeyboardManager sharedManager] disableInViewControllerClass:[VENTouchLockCreatePasscodeViewController class]];
-    [[IQKeyboardManager sharedManager] disableInViewControllerClass:[VENTouchLockEnterPasscodeViewController class]];
+//    [[IQKeyboardManager sharedManager] disableInViewControllerClass:[VENTouchLockCreatePasscodeViewController class]];
+//    [[IQKeyboardManager sharedManager] disableInViewControllerClass:[VENTouchLockEnterPasscodeViewController class]];
     
     
     [[VENTouchLock sharedInstance] setKeychainService:@"WSService"

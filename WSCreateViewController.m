@@ -14,12 +14,13 @@
 
 @property (weak, nonatomic  ) IBOutlet MKMapView         *mapView;
 @property (weak, nonatomic  ) IBOutlet FUIButton         *photoButton;
-@property (weak, nonatomic  ) IBOutlet FUITextField      *nameTF;
-@property (weak, nonatomic  ) IBOutlet FUITextField      *username;
-@property (weak, nonatomic  ) IBOutlet FUITextField      *password;
-@property (weak, nonatomic  ) IBOutlet FUITextField      *ipAddr;
+@property (weak, nonatomic  ) IBOutlet UITextField      *nameTF;
+@property (weak, nonatomic  ) IBOutlet UITextField      *username;
+@property (weak, nonatomic  ) IBOutlet UITextField      *password;
+@property (weak, nonatomic  ) IBOutlet UITextField      *ipAddr;
 @property (weak, nonatomic  ) IBOutlet UIImageView       *photoIV;
 @property (weak, nonatomic  ) IBOutlet UIBarButtonItem   *saveButton;
+@property (weak, nonatomic) IBOutlet UITextField *computerName;
 //@property (nonatomic, strong) MKUserLocation    *location;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) CLLocation *location;
@@ -67,9 +68,7 @@ UIImage *photo;
     [actionSheet showInView:self.view];
 }
 - (IBAction)useCurrentLocationClicked:(id)sender {
-    if (!self.location) {
-        [self showFUIAlertErrorWithMessage:@"Failed to get Location"];
-    } else {
+    if (self.location) {
         self.ws.lon = self.location.coordinate.longitude;
         self.ws.lat = self.location.coordinate.latitude;
     }
@@ -82,6 +81,7 @@ UIImage *photo;
     ws.ipaddr                 = self.ipAddr.text;
     ws.lon                    = self.ws.lon;
     ws.lat                    = self.ws.lat;
+    ws.computer_name = self.computerName.text;
     if (photo) {
         NSString *documentsPath = [Utility getImagesPath];
         NSString *uuid            = [[NSUUID UUID] UUIDString];
@@ -111,6 +111,8 @@ UIImage *photo;
     // do not need to update location :)
     WorkSpaceModel *ws        = [[WorkSpaceModel alloc] init];
     ws.id                     = self.ws.id;
+    ws.thumb_path = self.ws.thumb_path;
+    ws.image_path = self.ws.image_path;
     [self fillFieldsWS:ws];
     [[WorkSpaceManager sharedManager] updateOne:ws];
     if (self.delegate) {
@@ -153,15 +155,15 @@ UIImage *photo;
 //    }
 //}
 
--(void)flatTextField:(FUITextField*) myTextField {
-    myTextField.font            = [UIFont flatFontOfSize:16];
-    myTextField.backgroundColor = [UIColor clearColor];
-    myTextField.edgeInsets      = UIEdgeInsetsMake(4.0f, 15.0f, 4.0f, 15.0f);
-    myTextField.textFieldColor  = [UIColor whiteColor];
-    myTextField.borderColor     = [UIColor turquoiseColor];
-    myTextField.borderWidth     = 2.0f;
-    myTextField.cornerRadius    = 3.0f;
-}
+//-(void)flatTextField:(FUITextField*) myTextField {
+//    myTextField.font            = [UIFont flatFontOfSize:16];
+//    myTextField.backgroundColor = [UIColor clearColor];
+//    myTextField.edgeInsets      = UIEdgeInsetsMake(4.0f, 15.0f, 4.0f, 15.0f);
+//    myTextField.textFieldColor  = [UIColor whiteColor];
+//    myTextField.borderColor     = [UIColor turquoiseColor];
+//    myTextField.borderWidth     = 2.0f;
+//    myTextField.cornerRadius    = 3.0f;
+//}
 
 -(void) tapDetected:(UITapGestureRecognizer *) gr {
     if (gr.state == UIGestureRecognizerStateEnded) {
@@ -175,29 +177,31 @@ UIImage *photo;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (self.isCreateNew)
-        [self.saveButton setEnabled:NO];
+//    if (self.isCreateNew)
+//        [self.saveButton setEnabled:NO];
     self.mapView.delegate  = self;
     self.nameTF.delegate   = self;
     self.username.delegate = self;
     self.password.delegate = self;
     self.ipAddr.delegate   = self;
+    self.computerName.delegate = self;
     
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected:)];
     singleTap.numberOfTapsRequired = 1;
     [self.photoIV setUserInteractionEnabled:YES];
     [self.photoIV addGestureRecognizer:singleTap];
-    
-    [self flatTextField:self.nameTF];
-    [self flatTextField:self.username];
-    [self flatTextField:self.password];
-    [self flatTextField:self.ipAddr];
+//    
+//    [self flatTextField:self.nameTF];
+//    [self flatTextField:self.username];
+////    [self flatTextField:self.password];
+//    [self flatTextField:self.ipAddr];
     
     if (!self.isCreateNew) {
         self.nameTF.text   = self.ws.name;
         self.username.text = self.ws.username;
         self.password.text = self.ws.password;
         self.ipAddr.text   = self.ws.ipaddr;
+        self.computerName.text = self.ws.computer_name;
         UIImage *image     = [UIImage imageNamed:[[Utility getImagesPath] stringByAppendingPathComponent:self.ws.image_path]];
         self.photoIV.image = image;
         hasPhoto = YES;
@@ -218,42 +222,45 @@ UIImage *photo;
     self.useLocationButton.titleLabel.font = [UIFont boldFlatFontOfSize:16];
     [self.useLocationButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
     [self.useLocationButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
-    
-    [[INTULocationManager sharedInstance] requestLocationWithDesiredAccuracy:INTULocationAccuracyBlock timeout:20 block:^(CLLocation *currentLocation, INTULocationAccuracy achievedAccuracy, INTULocationStatus status) {
-        switch (status) {
-            case INTULocationStatusSuccess: {
-                self.location = currentLocation;
-            }
-                break;
-            case INTULocationStatusTimedOut: {
-                [self showFUIAlertErrorWithMessage:@"Time out"];
-            }
-                
-                break;
-            case INTULocationStatusError: {
-                [self showFUIAlertErrorWithMessage:@"Failed to Get Your Location"];
-            }
-                break;
-            case INTULocationStatusServicesDenied: {
-                [self showFUIAlertErrorWithMessage:@"Location services denied"];
-            }
-                break;
-            case INTULocationStatusServicesDisabled: {
-                [self showFUIAlertErrorWithMessage:@"Location services disabled"];
-            }
-                break;
-            case INTULocationStatusServicesNotDetermined: {
-                [self showFUIAlertErrorWithMessage:@"Location services not determined"];
-            }
-                break;
-            case INTULocationStatusServicesRestricted: {
-                [self showFUIAlertErrorWithMessage:@"Location services restricted"];
-            }
-                break;
-            default:
-                break;
-        }
-    }];
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    self.locationManager.delegate = self;
+    [self.locationManager startUpdatingLocation];
+//    [[INTULocationManager sharedInstance] requestLocationWithDesiredAccuracy:INTULocationAccuracyBlock timeout:20 block:^(CLLocation *currentLocation, INTULocationAccuracy achievedAccuracy, INTULocationStatus status) {
+//        switch (status) {
+//            case INTULocationStatusSuccess: {
+//                self.location = currentLocation;
+//            }
+//                break;
+//            case INTULocationStatusTimedOut: {
+//                [self showFUIAlertErrorWithMessage:@"Time out"];
+//            }
+//                
+//                break;
+//            case INTULocationStatusError: {
+//                [self showFUIAlertErrorWithMessage:@"Failed to Get Your Location"];
+//            }
+//                break;
+//            case INTULocationStatusServicesDenied: {
+//                [self showFUIAlertErrorWithMessage:@"Location services denied"];
+//            }
+//                break;
+//            case INTULocationStatusServicesDisabled: {
+//                [self showFUIAlertErrorWithMessage:@"Location services disabled"];
+//            }
+//                break;
+//            case INTULocationStatusServicesNotDetermined: {
+//                [self showFUIAlertErrorWithMessage:@"Location services not determined"];
+//            }
+//                break;
+//            case INTULocationStatusServicesRestricted: {
+//                [self showFUIAlertErrorWithMessage:@"Location services restricted"];
+//            }
+//                break;
+//            default:
+//                break;
+//        }
+//    }];
     
     // Do any additional setup after loading the view.
     //    self.locationManager = [[CLLocationManager alloc] init];
@@ -261,6 +268,15 @@ UIImage *photo;
     //    [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
     //    [self.locationManager requestAlwaysAuthorization];
     //    [self.locationManager startUpdatingLocation];
+}
+
+#pragma mark - location
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    if ([locations lastObject]) {
+        self.location = [locations lastObject];
+        [self.locationManager stopUpdatingLocation];
+    }
 }
 
 -(void) showFUIAlertErrorWithMessage:(NSString*) message {
@@ -299,13 +315,18 @@ UIImage *photo;
             [self textLengthAfterTrimming:self.ipAddr.text]);
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    if ([self enableSaveButton]) {
-        [self.saveButton setEnabled:YES];
-    } else {
-        [self.saveButton setEnabled:NO];
-    }
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if ([textField isFirstResponder])
+        [textField resignFirstResponder];
+    return YES;
 }
+//- (void)textFieldDidEndEditing:(UITextField *)textField {
+//    if ([self enableSaveButton]) {
+//        [self.saveButton setEnabled:YES];
+//    } else {
+//        [self.saveButton setEnabled:NO];
+//    }
+//}
 
 /*
  #pragma mark - Navigation

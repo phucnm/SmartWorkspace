@@ -48,6 +48,7 @@
             model.ipaddr = [result stringForColumn:@"ipaddr"];
             model.lon = [result doubleForColumn:@"lon"];
             model.lat = [result doubleForColumn:@"lat"];
+            model.computer_name = [result stringForColumn:@"computer_name"];
             //model.address = [result stringForColumn:@"address"];
             [self.arrWorkSpaces addObject:[model decrypt]];
         }
@@ -60,7 +61,7 @@
 - (BOOL)addOne:(WorkSpaceModel *)ws {
     if ([self.db open]) {
         ws = [ws encrypt];
-        BOOL res = [self.db executeUpdate:@"INSERT INTO WORKSPACES(name, image_path, thumb_path, username, password, ipaddr, lon, lat) VALUES(?,?,?,?,?,?,?,?)", ws.name, ws.image_path, ws.thumb_path, ws.username, ws.password, ws.ipaddr, [NSNumber numberWithDouble:ws.lon], [NSNumber numberWithDouble:ws.lat]];
+        BOOL res = [self.db executeUpdate:@"INSERT INTO WORKSPACES(name, image_path, thumb_path, username, password, ipaddr, lon, lat, computer_name) VALUES(?,?,?,?,?,?,?,?,?)", ws.name, ws.image_path, ws.thumb_path, ws.username, ws.password, ws.ipaddr, [NSNumber numberWithDouble:ws.lon], [NSNumber numberWithDouble:ws.lat], ws.computer_name];
         
         [self.db close];
         if (res)
@@ -72,7 +73,7 @@
 -(BOOL)updateOne:(WorkSpaceModel*)ws {
     if ([self.db open]) {
         ws = [ws encrypt];
-        BOOL res = [self.db executeUpdate:@"UPDATE WORKSPACES SET name=?, image_path=?, thumb_path=?, username=?, password=?, ipaddr=?, lon=?, lat=? WHERE _id=?", ws.name, ws.image_path, ws.thumb_path, ws.username, ws.password, ws.ipaddr, [NSNumber numberWithDouble:ws.lon], [NSNumber numberWithDouble:ws.lat], [NSNumber numberWithInt:ws.id]];
+        BOOL res = [self.db executeUpdate:@"UPDATE WORKSPACES SET name=?, image_path=?, thumb_path=?, username=?, password=?, ipaddr=?, lon=?, lat=?, computer_name = ? WHERE _id=?", ws.name, ws.image_path, ws.thumb_path, ws.username, ws.password, ws.ipaddr, [NSNumber numberWithDouble:ws.lon], [NSNumber numberWithDouble:ws.lat], ws.computer_name, [NSNumber numberWithInt:ws.id]];
         
         [self.db close];
         if (res)

@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '0F03BE45FEF57B7436BD0410'
+               BlueprintIdentifier = 'DFE85AAFE298FFD2D15EBCF9'
                BlueprintName = 'DMPasscode-DMPasscode'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'DMPasscode.bundle'>

@@ -9,7 +9,6 @@ pod 'FMDB'
 pod 'SWTableViewCell', '~> 0.3.7'
 pod 'objectiveflickr'
 pod 'DZNEmptyDataSet'
-pod 'IQKeyboardManager'
 pod 'SVProgressHUD', :head
 pod 'FlatUIKit'
 pod 'INTULocationManager'

@@ -24,12 +24,34 @@
 CLGeocoder *geocoder;
 CLPlacemark *placemark;
 
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    self.location = [locations lastObject];
+    [self.clManager stopUpdatingLocation];
+    [self.arrWorkspaces sortUsingComparator:^NSComparisonResult(WorkSpaceModel *obj1, WorkSpaceModel *obj2) {
+        CLLocation *first     = [[CLLocation alloc] initWithLatitude:obj1.lat longitude:obj1.lon];
+        CLLocation *second    = [[CLLocation alloc] initWithLatitude:obj2.lat longitude:obj2.lon];
+        CLLocationDistance d1 = [self.location distanceFromLocation:first];
+        CLLocationDistance d2 = [self.location distanceFromLocation:second];
+        if (d1 < d2) {
+            return NSOrderedAscending;
+        }
+        if (d1 > d2) {
+            return NSOrderedDescending;
+        }
+        return NSOrderedSame;
+    }];
+
+//    NSLog(@"%@", [locations lastObject]);
+    
+}
+
 -(void)dealloc {
     self.tableView.emptyDataSetSource = nil;
     self.tableView.emptyDataSetDelegate = nil;
     self.clManager.delegate = nil;
 }
 
+//
 -(void) simulateDB {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Simulate devices" message:@"Choose a DB file" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"db1", @"db2", @"db3", nil];
     [alert show];
@@ -56,12 +78,14 @@ CLPlacemark *placemark;
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self reloadLocation];
+    //[self reloadLocation];
+    [self.clManager startUpdatingLocation];
+    [self.tableView reloadData];
 }
 
 - (void)reloadLocation {
     //[self.clManager startUpdatingLocation];
-    [[INTULocationManager sharedInstance] requestLocationWithDesiredAccuracy:INTULocationAccuracyBlock timeout:20 block:^(CLLocation *currentLocation, INTULocationAccuracy achievedAccuracy, INTULocationStatus status) {
+    [[INTULocationManager sharedInstance] requestLocationWithDesiredAccuracy:INTULocationAccuracyBlock timeout:20 delayUntilAuthorized:YES block:^(CLLocation *currentLocation, INTULocationAccuracy achievedAccuracy, INTULocationStatus status) {
         switch (status) {
             case INTULocationStatusSuccess: {
                 self.location = currentLocation;
@@ -115,6 +139,7 @@ CLPlacemark *placemark;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //Touch id
     [VENTouchLock setShouldUseTouchID:YES];
     if ([[VENTouchLock sharedInstance] isPasscodeSet] ) {
         if (![VENTouchLock shouldUseTouchID]) {
@@ -132,11 +157,16 @@ CLPlacemark *placemark;
     [self.navigationItem.rightBarButtonItem removeTitleShadow];
     [self.navigationItem.leftBarButtonItem removeTitleShadow];
     [self.navigationController.navigationBar setBarTintColor:[UIColor cloudsColor]];
-    UIBarButtonItem *simulate = [[UIBarButtonItem alloc] initWithTitle:@"Simulate" style:UIBarButtonItemStylePlain target:self action:@selector(simulateDB)];
-//    UIBarButtonItem *simulate = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonItemStylePlain target:self action:@selector(simulateDB)];
-    NSMutableArray *rights = [self.navigationItem.rightBarButtonItems mutableCopy];
-    [rights addObject:simulate];
-    self.navigationItem.rightBarButtonItems = rights;
+    
+    //uncomment this code block to use simulate 3 device in 1 device if needed
+    
+//    UIBarButtonItem *simulate = [[UIBarButtonItem alloc] initWithTitle:@"Simulate" style:UIBarButtonItemStylePlain target:self action:@selector(simulateDB)];
+////    UIBarButtonItem *simulate = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonItemStylePlain target:self action:@selector(simulateDB)];
+//    NSMutableArray *rights = [self.navigationItem.rightBarButtonItems mutableCopy];
+//    [rights addObject:simulate];
+//    self.navigationItem.rightBarButtonItems = rights;
+    
+    //Empty state of workspace list
     self.tableView.emptyDataSetDelegate = self;
     self.tableView.emptyDataSetSource   = self;
     self.tableView.tableFooterView      = [UIView new];
@@ -186,7 +216,8 @@ CLPlacemark *placemark;
 -(void) getLatestData {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         self.arrWorkspaces = [[[WorkSpaceManager sharedManager] selectAll] mutableCopy];
-        [self reloadLocation];
+        [self.clManager startUpdatingLocation];
+        //[self reloadLocation];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
             [self.refreshControl endRefreshing];
@@ -237,7 +268,7 @@ CLPlacemark *placemark;
     [self.tableView endUpdates];
 }
 
-#pragma mark - Prepare segue
+#pragma mark - Navigation
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"toMapView"]) {
         MapsViewController *mapView = (MapsViewController*)[[segue destinationViewController] topViewController];
@@ -379,7 +410,7 @@ CLPlacemark *placemark;
     NSMutableArray *rightUtilityButtons = [NSMutableArray new];
     [rightUtilityButtons sw_addUtilityButtonWithColor:
      [UIColor colorWithRed:0.78f green:0.78f blue:0.8f alpha:1.0]
-                                                title:@"Edit"];
+                                                title:@"On map"];
     [rightUtilityButtons sw_addUtilityButtonWithColor:
      [UIColor colorWithRed:1.0f green:0.231f blue:0.188 alpha:1.0f]
                                                 title:@"Delete"];
