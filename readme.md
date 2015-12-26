@@ -1,5 +1,3 @@
-Update 12/27/15
-
 ## How to open project
 Just open SmartWorkspace.xcworkspace (due to CocoaPods)
 
@@ -11,3 +9,8 @@ The main target of folder hierarchy reconstuction is to easier to manage from Fi
 
 ## Pods
 The project used CocoaPods as depedency management. Libraries are listed in Podfile
+
+## :)
+Feel free to ask me for something uncleared
+
+Thanks !
