@@ -1,3 +1,7 @@
+This is the iOS companion app for my bachelor thesis. Basically it's a mobile secure identity manager which also allows you to login into Windows, websites and Windows apps automatically and securely thanks to our proposed security scheme.
+
+Demo can be found here. https://www.youtube.com/watch?v=HIu5Q_190Dw&feature=share
+
 ## How to open project
 Just open SmartWorkspace.xcworkspace (due to CocoaPods)
 
